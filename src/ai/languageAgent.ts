@@ -1,8 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { env, required } from "../config/env.js";
+import { env, hasAnthropic, hasGemini, required } from "../config/env.js";
 import { EXTRACTION_SYSTEM_PROMPT, buildClarificationSystemPrompt, buildReplySystemPrompt } from "./promptTemplates.js";
 import type { ExtractedIntent, ScamAssessment, SupportedLanguage } from "../types.js";
 import { extractIntentOffline } from "./offlineFallback.js";
+import { composeTextGemini, extractIntentGemini } from "./geminiClient.js";
 
 let client: Anthropic | null = null;
 function getClient(): Anthropic {
@@ -37,35 +38,43 @@ export interface RawExtraction {
 /**
  * Turns a raw trader message (already transcribed if it came in as voice,
  * or a vision-derived product description if it came in as a photo) into
- * structured facts. Uses Claude's tool-use to force a schema-conformant
- * result instead of parsing free-form JSON out of prose — cheaper to get
- * right and impossible to hallucinate extra fields into.
+ * structured facts.
  *
- * Falls back to a small deterministic extractor (offlineFallback.ts) when
- * no ANTHROPIC_API_KEY is configured, so the pipeline's plumbing and the
- * unit-conversion/scam-detection logic can be exercised and tested without
- * spending API credits.
+ * Provider priority: Anthropic (Claude tool-use, forcing a schema-conformant
+ * result) when ANTHROPIC_API_KEY is set, otherwise Gemini (structured JSON
+ * output) when GEMINI_API_KEY is set — Google AI Studio issues Gemini keys
+ * free, with no credit card required, so this is the zero-cost path to a
+ * fully fluent, multilingual demo. With neither key set, falls back to a
+ * small deterministic extractor (offlineFallback.ts) so the pipeline's
+ * plumbing and the unit-conversion/scam-detection logic can still be
+ * exercised and tested without any API key at all.
  */
 export async function extractIntentFromText(rawText: string): Promise<RawExtraction> {
-  if (!env.anthropicApiKey) {
+  if (hasAnthropic) {
+    const anthropic = getClient();
+    const response = await anthropic.messages.create({
+      model: env.anthropicModel,
+      max_tokens: 512,
+      system: EXTRACTION_SYSTEM_PROMPT,
+      tools: [INTENT_TOOL],
+      tool_choice: { type: "tool", name: "record_intent" },
+      messages: [{ role: "user", content: rawText }],
+    });
+
+    const toolUse = response.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
+    if (toolUse) return toolUse.input as RawExtraction;
     return extractIntentOffline(rawText);
   }
 
-  const anthropic = getClient();
-  const response = await anthropic.messages.create({
-    model: env.anthropicModel,
-    max_tokens: 512,
-    system: EXTRACTION_SYSTEM_PROMPT,
-    tools: [INTENT_TOOL],
-    tool_choice: { type: "tool", name: "record_intent" },
-    messages: [{ role: "user", content: rawText }],
-  });
-
-  const toolUse = response.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
-  if (!toolUse) {
-    return extractIntentOffline(rawText);
+  if (hasGemini) {
+    try {
+      return await extractIntentGemini(EXTRACTION_SYSTEM_PROMPT, rawText);
+    } catch {
+      return extractIntentOffline(rawText);
+    }
   }
-  return toolUse.input as RawExtraction;
+
+  return extractIntentOffline(rawText);
 }
 
 export interface ReplyContext {
@@ -78,11 +87,6 @@ export interface ReplyContext {
 }
 
 export async function composeReply(ctx: ReplyContext): Promise<string> {
-  if (!env.anthropicApiKey) {
-    return offlineReply(ctx);
-  }
-
-  const anthropic = getClient();
   const facts = [
     `Item: ${ctx.productName}`,
     `Quantity/unit: ${ctx.quantity} ${ctx.unitName}`,
@@ -92,14 +96,7 @@ export async function composeReply(ctx: ReplyContext): Promise<string> {
     `Reason: ${ctx.scam.explanation}`,
   ].join("\n");
 
-  const response = await anthropic.messages.create({
-    model: env.anthropicModel,
-    max_tokens: 400,
-    system: buildReplySystemPrompt(ctx.language),
-    messages: [{ role: "user", content: facts }],
-  });
-
-  return extractText(response);
+  return composeText(buildReplySystemPrompt(ctx.language), facts, () => offlineReply(ctx));
 }
 
 export async function composeClarification(
@@ -107,24 +104,42 @@ export async function composeClarification(
   productGuess: string | null,
   availableUnits: string[],
 ): Promise<string> {
-  if (!env.anthropicApiKey) {
-    return offlineClarification(productGuess, availableUnits);
-  }
-
-  const anthropic = getClient();
   const context = [
     `Product mentioned: ${productGuess ?? "unclear"}`,
     availableUnits.length > 0 ? `Known units for this product: ${availableUnits.join(", ")}` : "No known units yet for this product.",
   ].join("\n");
 
-  const response = await anthropic.messages.create({
-    model: env.anthropicModel,
-    max_tokens: 200,
-    system: buildClarificationSystemPrompt(language),
-    messages: [{ role: "user", content: context }],
-  });
+  return composeText(buildClarificationSystemPrompt(language), context, () =>
+    offlineClarification(productGuess, availableUnits),
+  );
+}
 
-  return extractText(response);
+/**
+ * Shared provider routing for the two free-text composition steps (reply,
+ * clarification) — same priority order as extractIntentFromText: Anthropic,
+ * then free-tier Gemini, then the offline template as a last resort.
+ */
+async function composeText(systemPrompt: string, userContent: string, offline: () => string): Promise<string> {
+  if (hasAnthropic) {
+    const anthropic = getClient();
+    const response = await anthropic.messages.create({
+      model: env.anthropicModel,
+      max_tokens: 400,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userContent }],
+    });
+    return extractText(response);
+  }
+
+  if (hasGemini) {
+    try {
+      return await composeTextGemini(systemPrompt, userContent);
+    } catch {
+      return offline();
+    }
+  }
+
+  return offline();
 }
 
 function extractText(response: Anthropic.Message): string {

@@ -2,19 +2,29 @@
 
 The codebase is complete and runs the full pricing/scam-detection pipeline offline with **zero accounts**. Everything below is only needed to light up specific features. Do them in this order — each is additive and independent.
 
-## 1. Required for any real AI behavior (~5 min)
+## 1. Required for any real AI behavior (~5 min, $0)
 
-- [ ] Create an Anthropic account and get an API key: https://console.anthropic.com
+Pick **one** of these — the app auto-detects whichever key is set (Anthropic wins if both are).
+
+**Option A — Gemini (free, no credit card, recommended if you have no budget):**
+- [ ] Go to https://aistudio.google.com/apikey, sign in with a Google account, click "Create API key". No billing setup required to use the free tier.
+- [ ] `cp .env.example .env`
+- [ ] Paste the key into `GEMINI_API_KEY=` in `.env`
+
+**Option B — Anthropic (requires a small prepaid credit balance):**
+- [ ] Create an account and get an API key: https://console.anthropic.com
 - [ ] `cp .env.example .env`
 - [ ] Paste the key into `ANTHROPIC_API_KEY=` in `.env`
+
+**Either way, then:**
 - [ ] Run `npm install && npm run demo` and try:
   ```
   Mile 12
   Someone wan sell me 1 paint rubber of tomato for 6000
   ```
-  You should get a natural-language reply flagging the price as above the fair range.
+  You should get a natural-language reply flagging the price as above the fair range. The startup banner tells you which provider is active.
 
-Without this key, the app still runs (`npm run demo` works, all tests pass) using a small rule-based fallback — good for development, **not** what you want for the live judging demo, since it won't have real multilingual fluency.
+Without either key, the app still runs (`npm run demo` works, all tests pass) using a small rule-based fallback — good for development, **not** what you want for the live judging demo, since it won't have real multilingual fluency.
 
 ## 2. Recommended before judging day (~15 min)
 
@@ -45,9 +55,11 @@ Only needed if you want price data (and the crowdsourced-correction loop) to per
 - [ ] Copy your project URL and service-role key into `.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`). Both must be set — the app falls back to the local dataset if either is missing.
 - [ ] Run `npm run seed:supabase` to load the same seed dataset the local JSON fallback uses (`scripts/seedSupabase.ts`) into your new tables.
 
-## 5. Optional: voice input (~5 min)
+## 5. Optional: voice input (~5 min, requires a prepaid OpenAI balance)
 
-- [ ] Get an OpenAI API key (used only for Whisper transcription): https://platform.openai.com
+Unlike the Gemini option above, there's no free tier for Whisper — skip this one entirely if you're on zero budget. It's a genuine bolt-on: the text and photo paths work fully without it.
+
+- [ ] Get an OpenAI API key: https://platform.openai.com
 - [ ] Set `OPENAI_API_KEY` in `.env`. Voice notes sent to the Twilio webhook will now be transcribed automatically before hitting the pipeline.
 
 ## 6. Optional: voice replies via YarnGPT (~15-20 min, do last)
@@ -61,4 +73,4 @@ Only needed if you want price data (and the crowdsourced-correction loop) to per
 
 ## Fastest path to a working demo right now
 
-If you only do one thing: get an Anthropic API key (step 1) and run `npm run demo`. Everything else is additive polish.
+If you only do one thing: get a **free** Gemini API key (step 1, option A) and run `npm run demo`. Everything else is additive polish.

@@ -85,8 +85,9 @@ src/
   data/                      Storage-agnostic price/trader repositories (local JSON ⇄ Supabase, same interface)
   domain/                    Pure/deterministic business logic: unit conversion, fair-price math,
                               scam-risk scoring, onboarding, the pipeline orchestrator
-  ai/                        Claude-backed language understanding, vision, prompt templates,
-                              plus a rule-based offline fallback for LLM-free dev/testing
+  ai/                        Language understanding, vision, prompt templates — routed across
+                              Claude, free-tier Gemini, or a rule-based offline fallback,
+                              in that priority order, based on which API key is set
   tts/yarnGpt.ts              Optional Nigerian-accented voice-reply synthesis (YarnGPT via HF endpoint)
   channels/whatsapp/          Twilio webhook + REST client
   cli/simulate.ts             WhatsApp-free chat simulator for reliable live demos
@@ -98,9 +99,11 @@ docs/                       Pitch one-liner, anticipated Q&A, setup checklist, d
 
 ```bash
 npm install
-cp .env.example .env        # fill in at least ANTHROPIC_API_KEY
+cp .env.example .env        # fill in ANTHROPIC_API_KEY, or GEMINI_API_KEY for a free-tier option
 npm run demo                # chat with Awòdì locally — no WhatsApp/Twilio needed
 ```
+
+**No budget for API credits?** Set `GEMINI_API_KEY` instead of `ANTHROPIC_API_KEY` — Google AI Studio (https://aistudio.google.com/apikey) issues Gemini keys on a genuinely free tier, no credit card required. The app picks whichever provider is configured automatically (Anthropic first if both are set).
 
 Try:
 

@@ -26,7 +26,7 @@ Awòdì is a WhatsApp-based AI assistant — no app download, no data-heavy inte
 ## Technical overview
 
 - **Input layer:** WhatsApp Business API via Twilio (sandbox for demo) receives text/voice/image.
-- **AI core:** Claude handles language understanding, cross-language reasoning (Pidgin/Yoruba/Hausa/Igbo), and generates the scam-risk explanation and negotiation tip in natural, localized phrasing.
+- **AI core:** Claude (or Gemini as a free-tier alternative — the app auto-selects whichever API key is configured) handles language understanding, cross-language reasoning (Pidgin/Yoruba/Hausa/Igbo), and generates the scam-risk explanation and negotiation tip in natural, localized phrasing.
 - **Price data layer:** a lightweight, swappable data layer (Supabase in production, a bundled seed dataset for demo/dev) covering a handful of high-frequency goods in 1-2 pilot markets (Mile 12, Balogun) — enough for a convincing demo, expandable via crowdsourced trader submissions.
 - **Voice/image handling:** Whisper speech-to-text for voice notes; a vision-capable Claude call for photo-based product identification when text isn't given; YarnGPT (Nigerian-built, open-source TTS) for natural-accented voice replies.
 

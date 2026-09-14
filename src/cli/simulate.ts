@@ -1,7 +1,7 @@
 import { createInterface } from "node:readline/promises";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
-import { hasSupabase, hasTranscription, hasYarnGpt, env } from "../config/env.js";
+import { hasAnthropic, hasGemini, hasSupabase, hasTranscription, hasYarnGpt } from "../config/env.js";
 import { handleInboundMessage } from "../domain/messageHandler.js";
 
 /**
@@ -25,7 +25,8 @@ async function main() {
   console.log("─".repeat(60));
   console.log("Awòdì — local WhatsApp simulator (no Twilio required)");
   console.log("─".repeat(60));
-  console.log(`LLM (Anthropic):   ${env.anthropicApiKey ? "configured" : "not set — running offline fallback"}`);
+  const llmStatus = hasAnthropic ? "Anthropic (Claude)" : hasGemini ? "Gemini (free tier)" : "none — running offline fallback";
+  console.log(`LLM provider:      ${llmStatus}`);
   console.log(`Price data:        ${hasSupabase ? "Supabase" : "local seed dataset"}`);
   console.log(`Voice input (STT): ${hasTranscription ? "enabled" : "disabled (text/photo only)"}`);
   console.log(`Voice output (TTS):${hasYarnGpt ? " enabled (YarnGPT)" : " disabled"}`);
