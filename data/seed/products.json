@@ -1,0 +1,10 @@
+[
+  { "id": "tomato", "name": "Tomato", "category": "produce", "base_unit": "kg", "aliases": ["tomatoes", "tomati"] },
+  { "id": "pepper-tatashe", "name": "Tatashe Pepper", "category": "produce", "base_unit": "kg", "aliases": ["tatashe", "bell pepper", "red pepper"] },
+  { "id": "onion", "name": "Onion", "category": "produce", "base_unit": "kg", "aliases": ["onions", "alubosa"] },
+  { "id": "rice-local", "name": "Local Rice", "category": "grain", "base_unit": "kg", "aliases": ["rice", "ofada rice", "shinkafa"] },
+  { "id": "garri", "name": "Garri", "category": "grain", "base_unit": "kg", "aliases": ["gari", "garri yellow", "garri white"] },
+  { "id": "beans", "name": "Brown Beans", "category": "grain", "base_unit": "kg", "aliases": ["beans", "ewa", "wake"] },
+  { "id": "fuel-petrol", "name": "Petrol (PMS)", "category": "fuel", "base_unit": "litre", "aliases": ["fuel", "petrol", "pms"] },
+  { "id": "ankara-fabric", "name": "Ankara Fabric", "category": "textile", "base_unit": "yard", "aliases": ["ankara", "african print"] }
+]

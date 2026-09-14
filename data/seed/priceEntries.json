@@ -1,0 +1,25 @@
+[
+  { "product_id": "tomato", "market_id": "mile-12", "unit_name": "paint_rubber", "low_price": 3500, "high_price": 4800, "source": "seed", "confidence": 0.6 },
+  { "product_id": "tomato", "market_id": "balogun", "unit_name": "paint_rubber", "low_price": 4000, "high_price": 5500, "source": "seed", "confidence": 0.5 },
+
+  { "product_id": "pepper-tatashe", "market_id": "mile-12", "unit_name": "paint_rubber", "low_price": 3000, "high_price": 4200, "source": "seed", "confidence": 0.6 },
+  { "product_id": "pepper-tatashe", "market_id": "balogun", "unit_name": "paint_rubber", "low_price": 3400, "high_price": 4700, "source": "seed", "confidence": 0.5 },
+
+  { "product_id": "onion", "market_id": "mile-12", "unit_name": "bag_50kg", "low_price": 68000, "high_price": 82000, "source": "seed", "confidence": 0.6 },
+  { "product_id": "onion", "market_id": "balogun", "unit_name": "bag_50kg", "low_price": 72000, "high_price": 88000, "source": "seed", "confidence": 0.5 },
+
+  { "product_id": "rice-local", "market_id": "mile-12", "unit_name": "derica", "low_price": 1400, "high_price": 1700, "source": "seed", "confidence": 0.6 },
+  { "product_id": "rice-local", "market_id": "mile-12", "unit_name": "bag_50kg", "low_price": 62000, "high_price": 72000, "source": "seed", "confidence": 0.6 },
+  { "product_id": "rice-local", "market_id": "balogun", "unit_name": "derica", "low_price": 1550, "high_price": 1850, "source": "seed", "confidence": 0.5 },
+
+  { "product_id": "garri", "market_id": "mile-12", "unit_name": "derica", "low_price": 550, "high_price": 700, "source": "seed", "confidence": 0.6 },
+  { "product_id": "garri", "market_id": "balogun", "unit_name": "derica", "low_price": 600, "high_price": 780, "source": "seed", "confidence": 0.5 },
+
+  { "product_id": "beans", "market_id": "mile-12", "unit_name": "derica", "low_price": 1300, "high_price": 1600, "source": "seed", "confidence": 0.6 },
+  { "product_id": "beans", "market_id": "balogun", "unit_name": "derica", "low_price": 1400, "high_price": 1750, "source": "seed", "confidence": 0.5 },
+
+  { "product_id": "fuel-petrol", "market_id": "mile-12", "unit_name": "litre", "low_price": 950, "high_price": 1050, "source": "seed", "confidence": 0.7 },
+  { "product_id": "fuel-petrol", "market_id": "balogun", "unit_name": "litre", "low_price": 950, "high_price": 1050, "source": "seed", "confidence": 0.7 },
+
+  { "product_id": "ankara-fabric", "market_id": "balogun", "unit_name": "yard", "low_price": 2200, "high_price": 3500, "source": "seed", "confidence": 0.5 }
+]

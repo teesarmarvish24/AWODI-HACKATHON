@@ -1,0 +1,34 @@
+[
+  { "product_id": "tomato", "unit_name": "kg", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "tomato", "unit_name": "paint_rubber", "to_base_factor": 4, "notes": "small paint-rubber bucket, approx 4kg — calibrate per market" },
+  { "product_id": "tomato", "unit_name": "basket_medium", "to_base_factor": 50, "notes": "medium tomato basket, approx 50kg" },
+
+  { "product_id": "pepper-tatashe", "unit_name": "kg", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "pepper-tatashe", "unit_name": "paint_rubber", "to_base_factor": 4, "notes": "approx 4kg" },
+  { "product_id": "pepper-tatashe", "unit_name": "mudu", "to_base_factor": 2.5, "notes": "approx 2.5kg" },
+
+  { "product_id": "onion", "unit_name": "kg", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "onion", "unit_name": "mudu", "to_base_factor": 2, "notes": "approx 2kg" },
+  { "product_id": "onion", "unit_name": "bag_25kg", "to_base_factor": 25, "notes": "small 25kg sack — deliberately kept alongside bag_50kg so a bare \"bag\" is genuinely ambiguous for this product, exercising the clarifying-question path" },
+  { "product_id": "onion", "unit_name": "bag_50kg", "to_base_factor": 50, "notes": "standard 50kg sack" },
+
+  { "product_id": "rice-local", "unit_name": "kg", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "rice-local", "unit_name": "derica", "to_base_factor": 1.5, "notes": "approx 1.5kg — derica size varies by seller, calibrate per market" },
+  { "product_id": "rice-local", "unit_name": "paint_rubber", "to_base_factor": 4, "notes": "approx 4kg" },
+  { "product_id": "rice-local", "unit_name": "bag_50kg", "to_base_factor": 50, "notes": "standard 50kg bag" },
+
+  { "product_id": "garri", "unit_name": "kg", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "garri", "unit_name": "derica", "to_base_factor": 1.2, "notes": "approx 1.2kg" },
+  { "product_id": "garri", "unit_name": "paint_rubber", "to_base_factor": 4, "notes": "approx 4kg" },
+  { "product_id": "garri", "unit_name": "bag_50kg", "to_base_factor": 50, "notes": "standard 50kg bag" },
+
+  { "product_id": "beans", "unit_name": "kg", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "beans", "unit_name": "derica", "to_base_factor": 1.5, "notes": "approx 1.5kg" },
+  { "product_id": "beans", "unit_name": "paint_rubber", "to_base_factor": 4, "notes": "approx 4kg" },
+  { "product_id": "beans", "unit_name": "bag_100kg", "to_base_factor": 100, "notes": "standard 100kg bag" },
+
+  { "product_id": "fuel-petrol", "unit_name": "litre", "to_base_factor": 1, "notes": "base unit" },
+  { "product_id": "fuel-petrol", "unit_name": "keg_25l", "to_base_factor": 25, "notes": "standard jerry can" },
+
+  { "product_id": "ankara-fabric", "unit_name": "yard", "to_base_factor": 1, "notes": "base unit" }
+]
